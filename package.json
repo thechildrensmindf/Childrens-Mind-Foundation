@@ -1,0 +1,12 @@
+{
+  "name": "childrens-mind-foundation-website",
+  "version": "1.0.0",
+  "description": "Website for The Children's Mind Foundation",
+  "private": true,
+  "dependencies": {
+    "resend": "^6.0.0"
+  },
+  "engines": {
+    "node": "18.x"
+  }
+}
