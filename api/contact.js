@@ -14,14 +14,19 @@
 const { Resend } = require("resend");
 
 module.exports = async (req, res) => {
-  // Only allow POST requests
-  if (req.method !== "POST") {
-    return res.status(405).json({ error: "Method not allowed" });
-  }
-
   // Enable CORS for your domain
   res.setHeader("Access-Control-Allow-Credentials", "true");
-  res.setHeader("Access-Control-Allow-Origin", "*");
+  const allowedOrigins = new Set([
+    "https://thechildrensmindsfoundation.org",
+    "https://www.thechildrensmindsfoundation.org",
+  ]);
+  const requestOrigin = req.headers.origin;
+
+  if (allowedOrigins.has(requestOrigin)) {
+    res.setHeader("Access-Control-Allow-Origin", requestOrigin);
+    res.setHeader("Vary", "Origin");
+  }
+
   res.setHeader("Access-Control-Allow-Methods", "GET,OPTIONS,PATCH,DELETE,POST,PUT");
   res.setHeader(
     "Access-Control-Allow-Headers",
@@ -32,6 +37,11 @@ module.exports = async (req, res) => {
   if (req.method === "OPTIONS") {
     res.status(200).end();
     return;
+  }
+
+  // Only allow POST requests
+  if (req.method !== "POST") {
+    return res.status(405).json({ error: "Method not allowed" });
   }
 
   try {

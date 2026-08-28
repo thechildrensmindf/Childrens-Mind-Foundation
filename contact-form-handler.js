@@ -27,19 +27,31 @@
                        );
 
     if (!contactForm) {
-      console.warn("Contact form not found on page");
+      const observer = new MutationObserver(() => {
+        if (document.querySelector("form.contact-form")) {
+          observer.disconnect();
+          setupContactForm();
+        }
+      });
+      observer.observe(document.documentElement, { childList: true, subtree: true });
       return;
     }
 
-    contactForm.addEventListener("submit", handleFormSubmit);
+    contactForm.addEventListener("submit", handleFormSubmit, true);
 
     async function handleFormSubmit(e) {
       e.preventDefault();
+      e.stopImmediatePropagation();
 
       // Get form data
       const formData = new FormData(contactForm);
       const data = {
-        name: formData.get("name") || formData.get("fullName") || "",
+        name:
+          formData.get("name") ||
+          formData.get("fullName") ||
+          [formData.get("firstName"), formData.get("lastName")]
+            .filter(Boolean)
+            .join(" "),
         email: formData.get("email") || "",
         subject: formData.get("subject") || "",
         topic: formData.get("topic") || formData.get("subject") || "",
@@ -49,6 +61,7 @@
       // Get or create success message element
       let successMessage = document.getElementById("contact-form-success");
       let errorMessage = document.getElementById("contact-form-error");
+      const inlineStatus = document.getElementById("formStatus");
       let submitButton = contactForm.querySelector('button[type="submit"]');
 
       // Create message containers if they don't exist
@@ -91,10 +104,10 @@
           submitButton.textContent = "Sending...";
         }
 
-        // Determine the API endpoint
-        const apiEndpoint = window.location.origin.includes("localhost")
+        // Use the local function during development and the API subdomain in production.
+        const apiEndpoint = window.location.hostname === "localhost"
           ? "/api/contact"
-          : "/api/contact"; // Vercel will serve from the same origin
+          : "https://api.thechildrensmindsfoundation.org/api/contact";
 
         // Send the form data to the API
         const response = await fetch(apiEndpoint, {
@@ -112,6 +125,10 @@
           successMessage.textContent = result.message || 
             "Thank you! Your message has been sent successfully. We'll get back to you soon.";
           successMessage.style.display = "block";
+          if (inlineStatus) {
+            inlineStatus.textContent = successMessage.textContent;
+            inlineStatus.className = "form-status show ok";
+          }
           errorMessage.style.display = "none";
 
           // Clear the form
@@ -129,6 +146,10 @@
           errorMessage.textContent = result.error || 
             "Failed to send your message. Please try again later.";
           errorMessage.style.display = "block";
+          if (inlineStatus) {
+            inlineStatus.textContent = errorMessage.textContent;
+            inlineStatus.className = "form-status show err";
+          }
           successMessage.style.display = "none";
         }
       } catch (error) {
@@ -136,6 +157,10 @@
         errorMessage.textContent = 
           "An error occurred while sending your message. Please try again later.";
         errorMessage.style.display = "block";
+        if (inlineStatus) {
+          inlineStatus.textContent = errorMessage.textContent;
+          inlineStatus.className = "form-status show err";
+        }
         successMessage.style.display = "none";
       } finally {
         // Re-enable submit button
