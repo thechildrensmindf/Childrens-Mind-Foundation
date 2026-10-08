@@ -14,9 +14,10 @@ Marketing site and design system for **The Children's Mind Foundation**, a chari
 
 ## Getting started
 
-Everything is static HTML/CSS/JS — no build step or dependencies.
+The site is static HTML/CSS/JS and needs no build dependencies. A small Node.js script stages the Cloudflare deployment output.
 
 - **Quick look:** open `index.html` directly in a browser.
+- **Build and deploy to Cloudflare Workers:** `npm run build` stages the site in `dist/`; Wrangler automatically reads [`wrangler.json`](wrangler.json) from the repository root and uploads only that folder. Set its `name` to the existing Worker name in Cloudflare. Cloudflare Workers Builds can run `npm run build` as the build command and `npx wrangler deploy` as the deploy command. Run `npm run deploy` to build and deploy from a local terminal, or `npm run preview` to build and create a Cloudflare Worker Preview deployment using `npx wrangler preview` (currently open beta).
 - **Recommended (for the embedded book preview to load reliably):** serve the folder over a local web server, e.g.
 
   ```bash
