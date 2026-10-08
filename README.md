@@ -35,7 +35,10 @@ Lumi Colouring book.html
 Lumi Preview.html
 lumi-preview/            Colouring-book flipbook viewer
 lumi-preview-banner/     Landing-page flipbook preview
-assets/                 Logo, favicon, badge images
+assets/                 Logo, favicon, badge images, and photo sets
+  carousel/              Programs photo carousel images
+  story-of-lumi/         Story of Lumi collage images
+  image-sets.js          Image paths and matching alt text for both sections
 uploads/                Photography and illustration assets
 _ds/                    Design-system source
 screenshots/            Reference screenshots
@@ -51,6 +54,10 @@ The site is built on a small set of CSS custom properties (design tokens) define
 - **Radii & shadows** — `--r-sm/md/lg`, `--shadow-soft/card`.
 
 The layout is fully responsive (mobile, tablet, desktop) and includes on-scroll reveal animations and a single branded loading screen.
+
+## Photo galleries
+
+The Programs carousel uses images from `assets/carousel/`; the Story of Lumi collage uses `assets/story-of-lumi/`. To add, replace, or remove a photo, update the matching list in [`assets/image-sets.js`](assets/image-sets.js): keep each `src` and descriptive `alt` together in the same entry. The carousel displays each registered photo once and continuously moves to the left, cycling each tile from the end back to the beginning. Files placed in a folder are not included until they are listed in the registry.
 
 ## Notes
 

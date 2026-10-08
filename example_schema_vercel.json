@@ -1,0 +1,18 @@
+{
+  "functions": {
+    "api/contact.js": {
+      "maxDuration": 10
+    }
+  },
+  "env": {
+    "RESEND_API_KEY": {
+      "description": "Resend API key for sending emails"
+    },
+    "RESEND_FROM_EMAIL": {
+      "description": "Verified Resend sender email address"
+    },
+    "CONTACT_EMAIL": {
+      "description": "Email address to receive contact form submissions"
+    }
+  }
+}
