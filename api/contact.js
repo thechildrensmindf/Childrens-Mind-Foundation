@@ -19,10 +19,14 @@ module.exports = async (req, res) => {
   const allowedOrigins = new Set([
     "https://thechildrensmindsfoundation.org",
     "https://www.thechildrensmindsfoundation.org",
+    "https://lumi-ben-nevis.thechildrensmindsfoundation.org",
   ]);
   const requestOrigin = req.headers.origin;
+  const isVercelPreview =
+    typeof requestOrigin === "string" &&
+    /^https:\/\/childrens-mind-foundation-[a-z0-9-]+\.vercel\.app$/.test(requestOrigin);
 
-  if (allowedOrigins.has(requestOrigin)) {
+  if (allowedOrigins.has(requestOrigin) || isVercelPreview) {
     res.setHeader("Access-Control-Allow-Origin", requestOrigin);
     res.setHeader("Vary", "Origin");
   }
