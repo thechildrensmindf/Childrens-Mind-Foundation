@@ -40,7 +40,7 @@ Ensure `index.html` includes this before the closing `</body>` tag:
 ## Step 4: Test
 
 1. Open the deployed website.
-2. Submit the contact form with a real reply-to email address.
+2. Submit the contact form with a real reply-to email address, for example `name@example.com`. Addresses with a one-character domain suffix (such as `c@c.c`) are rejected before sending.
 3. Confirm the success message appears.
 4. Check the configured `CONTACT_EMAIL` inbox.
 
