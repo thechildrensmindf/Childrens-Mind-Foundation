@@ -66,9 +66,10 @@ module.exports = async (req, res) => {
       });
     }
 
-    // Validate email format
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!emailRegex.test(email)) {
+    // Normalize and validate the reply-to address before passing it to Resend.
+    const cleanEmail = typeof email === "string" ? email.trim() : "";
+    const emailRegex = /^[^\s@]+@(?:[^\s@.]+\.)+[^\s@.]{2,}$/;
+    if (!emailRegex.test(cleanEmail)) {
       return res.status(400).json({ error: "Invalid email address" });
     }
 
@@ -81,7 +82,6 @@ module.exports = async (req, res) => {
     };
 
     const cleanName = sanitize(name);
-    const cleanEmail = email.trim();
     const cleanTopic = topic ? sanitize(topic) : "General Enquiry";
     const cleanMessage = sanitize(message);
 
